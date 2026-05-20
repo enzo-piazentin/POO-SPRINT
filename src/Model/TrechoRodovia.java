@@ -3,45 +3,43 @@ package Model;
 public class TrechoRodovia {
     private double quilometroInicial, quilometroFinal, nivelVegetacao;
 
-    public TrechoRodovia(double quilometroInicial, double quilometroFinal, double nivelVegetacao){
-
-        if (quilometroInicial >= 0 && quilometroFinal >= 0 && nivelVegetacao >= 0  && !(quilometroInicial == quilometroFinal)) {
-            this.quilometroInicial = quilometroInicial;
-            this.quilometroFinal = quilometroFinal;
-            this.nivelVegetacao = nivelVegetacao;
-        } else {
-            System.out.println("Erro: valores informados errados ou valores iguais");
+    public TrechoRodovia(double quilometroInicial, double quilometroFinal, double nivelVegetacao) {
+        if (quilometroInicial < 0 || quilometroFinal < 0 || nivelVegetacao < 0) {
+            throw new IllegalArgumentException("Valores não podem ser negativos");
         }
+        if (quilometroInicial >= quilometroFinal) {
+            throw new IllegalArgumentException("Quilômetro final deve ser maior que o inicial");
+        }
+        this.quilometroInicial = quilometroInicial;
+        this.quilometroFinal = quilometroFinal;
+        this.nivelVegetacao = nivelVegetacao;
     }
 
     public void quilometroRodado(){
         double quilometroRodado = quilometroFinal - quilometroInicial;
+        System.out.println("Quilômetro da rodovia: " + quilometroRodado + "KM");
+    }
 
-        if (!(quilometroRodado == 0) &&  quilometroRodado >= 0) {
-            System.out.println("Quilometro da rodovia rodado foi: " + quilometroRodado + "KM");
+    public void registrarCrescimento(double taxa){
+        if (taxa > 0){
+            setNivelVegetacao(nivelVegetacao + taxa);
+            System.out.println("Nível de vegetação está: " + nivelVegetacao + "cm");
         } else {
-            System.out.println("Erro: Valor não pode ser igual a 0");
+            System.out.println("Taxa de crescimento deve ser positiva");
         }
     }
 
-    public double registrarCrescimento(double taxa){
-        if (taxa >= 0){
-            setNivelVegetacao(nivelVegetacao += taxa );
-            System.out.println("Nível de vegetação está: " + getNivelVegetacao() + "cm");
-        }else{
-            System.out.println("Sem multa registrada e vegetação dentro dos parâmetros.");
+    public void setNivelVegetacao(double nivelVegetacao) {
+        if (nivelVegetacao < 0) {
+            throw new IllegalArgumentException("Nível de vegetação não pode ser negativo");
         }
-
-        // terminar de fazer o metodo de registrarCrescimento e responde perguntas
-        return taxa;
+        this.nivelVegetacao = nivelVegetacao;
     }
 
-    public void exibirInfo(){
-        System.out.println("Quilometro inicial: "+ getQuilometroInicial() + "| Quilometo final: " + getQuilometroFinal() + "| Nível da vegetação: "+ getNivelVegetacao()+ "cm");
+    public void exibirInfo() {
+        System.out.println("Quilômetro inicial: " + getQuilometroInicial() + " | Quilômetro final: " + getQuilometroFinal() + " | Nível da vegetação: " + getNivelVegetacao() + "cm");
         quilometroRodado();
     }
-
-
 
 
     public double getQuilometroInicial() {
@@ -64,7 +62,4 @@ public class TrechoRodovia {
         return nivelVegetacao;
     }
 
-    private void setNivelVegetacao(double nivelVegetacao) {
-        this.nivelVegetacao = nivelVegetacao;
-    }
 }
